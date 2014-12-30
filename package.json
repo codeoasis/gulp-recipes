@@ -66,5 +66,10 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "options": {
+    "module": "myAngularApp",
+    "templateModule": "myAngularTplModule",
+    "templatePo": "template.po"
   }
 }
