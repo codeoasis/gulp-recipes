@@ -60,4 +60,97 @@ var options = _.extend(pkg, {
   }
 });
 
+// ADD HELP
+require('gulp-help')(gulp);
+
+// CLEAN
+require('./gulp/clean')(gulp, $, gutil, helpers, src, options);
+
+// CONNECT
+require('./gulp/watch')(gulp, $, gutil, helpers, src, options);
+
+// JAVASCRIPTS
+require('./gulp/javascripts')(gulp, $, gutil, helpers, src, options);
+
+// TEMPLATES
+require('./gulp/templates')(gulp, $, gutil, helpers, src, options);
+
+// STYLES
+require('./gulp/styles')(gulp, $, gutil, helpers, src, options);
+
+// VIEWS
+require('./gulp/usemin')(gulp, $, gutil, helpers, src, options);
+
+// INSTALL
+require('./gulp/install')(gulp, $, gutil, helpers, src, options);
+
+// inject bower components
+require('./gulp/bower')(gulp, $, gutil, helpers, src, options);
+
+// INJECT SOURCES
+require('./gulp/inject')(gulp, $, gutil, helpers, src, options);
+
+// JSHINT
+require('./gulp/jshint')(gulp, $, gutil, helpers, src, options);
+
+// CHANGELOG
+require('./gulp/changelog')(gulp, $, gutil, helpers, src, options);
+
+// COPY
+require('./gulp/copy')(gulp, $, gutil, helpers, src, options);
+
+// TRANSLATIONS
+require('./gulp/translate')(gulp, $, gutil, helpers, src, options);
+
+// KARMA
+require('./gulp/karma')(gulp, $, gutil, helpers, src, options);
+
+// ***************************************
+// TASKS
+// ***************************************
+
+gulp.task('dev-build', function () {
+  run(
+    ['compass', 'js', 'env', 'templates', 'resources']
+  );
+});
+
+gulp.task('build', 'Create the distribution', function () {
+  run(
+    'clean',
+    ['compass', 'js', 'env', 'templates', 'resources'],
+    ['bower', 'inject:dist'],
+    //'jshint',
+    ['usemin', 'copy']
+  );
+});
+
+gulp.task('serve', 'Serve the app and watch for changes', function () {
+  run(
+    'clean',
+    ['bowerinstall', 'npminstall'],
+    ['compass', 'js', 'env', 'templates', 'resources'],
+    ['bower', 'inject:dist'],
+    'connect',
+    'watch', 'open'
+  );
+});
+
+gulp.task('lint', 'Lint code', function () {
+  run(
+    'jshint',
+    'jscs'
+  );
+});
+
+gulp.task('test', 'Compile and run unit tests', function () {
+  run(
+    'clean:test',
+    ['bower:karma', 'inject:karma'],
+    'karma'
+  );
+});
+// Default tasks
+gulp.task('default', 'Run serve', ['serve']);
+
 
